@@ -3,6 +3,9 @@ package com.kyodude.todo_mvvm
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -84,8 +87,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show()
         } else if (requestCode == EDIT_NOTE_REQUEST && resultCode == RESULT_OK) {
             val id = data?.getIntExtra(AddEditNoteActivity.EXTRA_ID, -1)
-            if(id==-1)
-            {
+            if (id == -1) {
                 Toast.makeText(this, "Note can't be updated", Toast.LENGTH_LONG).show()
                 return
             }
@@ -103,6 +105,25 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Note updated", Toast.LENGTH_LONG).show()
         } else {
             Toast.makeText(this, "Couldn't save the note", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val meunInflater: MenuInflater = menuInflater
+        meunInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.delete_notes -> {
+                noteViewModel.deleteAllNotes()
+                Toast.makeText(this, "All notes deleted", Toast.LENGTH_SHORT).show()
+                return true
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
         }
     }
 }
